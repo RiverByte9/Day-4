@@ -1,0 +1,35 @@
+
+name: Day6 Build-Push
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Day-4/src/**' 
+      - '.github/workflows/day6-build-push.yaml' 
+  workflow_dispatch:
+env:
+  ECR_REPO: 851725266652.dkr.ecr.ap-south-1.amazonaws.com/test-dev-2-tier-flask
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3  # Fetches the latest code
+    - name: Verify Repository Structure
+      run: ls -R  # Debugging step to check file paths
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-south-1   
+    - name: Login to Amazon ECR
+      run: aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ${{  env.ECR_REPO }}
+    - name: Build, Tag, and Push Docker Image
+      run: |
+        cd $GITHUB_WORKSPACE || { echo "Directory not found!"; exit 1; }  # Prevents silent failures
+        ls -la  # Debugging step to check if Dockerfile is present
+        docker build -t ${{  env.ECR_REPO }}:day6 .
+        docker push ${{  env.ECR_REPO }}:day6
