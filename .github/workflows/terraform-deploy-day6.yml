@@ -49,9 +49,9 @@ jobs:
         working-directory: ${{ env.TERRAFORM_PATH }}
         run: terraform apply -auto-approve
 
-      - name: terrafom destroy setup
-        working-directory: ${{ env.TERRAFORM_PATH }}
-        run: terraform destroy -auto-approve
+      # - name: terrafom destroy setup
+      #   working-directory: ${{ env.TERRAFORM_PATH }}
+      #   run: terraform destroy -auto-approve
 
       # - name: Terraform formatting check
       #   working-directory: ${{ env.TERRAFORM_PATH }}
