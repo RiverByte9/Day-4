@@ -37,7 +37,7 @@ jobs:
         # Check where the Dockerfile is located
         if [ -f "./src/Dockerfile" ]; then
           echo "Using Dockerfile from src directory"
-          docker build -t ${{ env.ECR_REPO }}:day6 ./src
+           docker build -t ${{ env.ECR_REPO }}:day6 -f ./src/Dockerfile ./src
         elif [ -f "./Dockerfile" ]; then
           echo "Using Dockerfile from root directory"
           docker build -t ${{ env.ECR_REPO }}:day6 .
