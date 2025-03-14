@@ -71,7 +71,7 @@ variable "desired_flask_task_count" {
 
 variable "public_hosted_zone_id" {
   description = "The hosted zone id for the public domain"
-  default     = "livingdevops.com"
+  default     = "riverbyte.xyz"
 }
 
 variable "domain_name" {
