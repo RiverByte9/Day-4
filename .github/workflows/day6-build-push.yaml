@@ -5,7 +5,7 @@ on:
       - main
     paths:
       - 'Day-4/src/**' 
-      - '.github/workflows/day6-build-push.yaml'  
+      - '.github/workflows/day6-build-push.yaml' 
   workflow_dispatch:
 env:
   ECR_REPO: 851725266652.dkr.ecr.ap-south-1.amazonaws.com/test-dev-2-tier-flask  
@@ -17,8 +17,14 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3  # Fetches the latest code
 
-    - name: Verify Repository Structure
-      run: ls -R  # Debugging step to check file paths
+    - name: Debug - Verify Repository Structure
+      run: ls -R  # Check file paths
+
+    - name: Debug - List Files in `src/`
+      run: ls -la ./src || echo "src directory not found"
+
+    - name: Debug - List Files in Root
+      run: ls -la || echo "Root directory empty"
 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -32,18 +38,6 @@ jobs:
 
     - name: Build, Tag, and Push Docker Image
       run: |
-        ls -la  # Debugging step to check if Dockerfile is present
-        
-        # Check where the Dockerfile is located
-        if [ -f "./src/Dockerfile" ]; then
-          echo "Using Dockerfile from src directory"
-           docker build -t ${{ env.ECR_REPO }}:day6 -f ./src/Dockerfile ./src
-        elif [ -f "./Dockerfile" ]; then
-          echo "Using Dockerfile from root directory"
-          docker build -t ${{ env.ECR_REPO }}:day6 .
-        else
-          echo "Error: No Dockerfile found!"
-          exit 1
-        fi
-
+        echo "Building Docker image from ./src/Dockerfile"
+        docker build -t ${{ env.ECR_REPO }}:day6 -f ./src/Dockerfile ./src
         docker push ${{ env.ECR_REPO }}:day6
