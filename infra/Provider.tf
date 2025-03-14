@@ -28,7 +28,7 @@ provider "aws" {
 # Using S3 backend
 terraform {
   backend "s3" {
-    bucket  = "91030-devops"
+    bucket  = "112233-devops"
     key     = "2-tier-flask/dev-tfstate"
     region  = "ap-south-1"
     encrypt = true
