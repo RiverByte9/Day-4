@@ -8,7 +8,7 @@ on:
       - '.github/workflows/day6-build-push.yaml' 
   workflow_dispatch:
 env:
-  ECR_REPO: 851725266652.dkr.ecr.ap-south-1.amazonaws.com/test-dev-2-tier-flask  
+  ECR_REPO: 851725266652.dkr.ecr.ap-south-1.amazonaws.com/flask-dev-2-tier-flask 
 
 jobs:
   build:
