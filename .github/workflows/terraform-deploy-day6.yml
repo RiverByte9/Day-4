@@ -4,8 +4,8 @@ on:
     branches:
       - main
     paths:
-      - 'Day-4/infra/**'
-      - '.github/workflows/terraform-deploy-day6.yml'
+      - 'infra/**'
+      - '.github/workflows/terraform-deploy.yml'
   workflow_dispatch:
 
 jobs:
@@ -14,27 +14,15 @@ jobs:
     env:
       AWS_REGION: ap-south-1
       TERRAFORM_VER: 1.10.3
-      TERRAFORM_PATH: ./Day-4/infra  # Ensure correct path
+      TERRAFORM_PATH: infra  # ✅ Use correct path
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Debug File Structure  # 🛠️ Check the folder structure
+      - name: Debug File Structure 🛠️
         run: ls -R
         working-directory: ${{ github.workspace }}
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with: 
-          terraform_version: "1.10.3"
 
       - name: Verify Directory Before Running Terraform 🛠️
         run: |
@@ -43,6 +31,11 @@ jobs:
             exit 1
           fi
         shell: bash
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with: 
+          terraform_version: "1.10.3"
 
       - name: Terraform Init
         working-directory: ${{ env.TERRAFORM_PATH }}
