@@ -14,11 +14,15 @@ jobs:
     env:
       AWS_REGION: ap-south-1
       TERRAFORM_VER: 1.10.3
-      TERRAFORM_PATH: Day-4/infra
+      TERRAFORM_PATH: ./Day-4/infra  # Ensure correct path
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      - name: Debug File Structure  # 🛠️ Check the folder structure
+        run: ls -R
+        working-directory: ${{ github.workspace }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -31,6 +35,14 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with: 
           terraform_version: "1.10.3"
+
+      - name: Verify Directory Before Running Terraform 🛠️
+        run: |
+          if [ ! -d "${{ env.TERRAFORM_PATH }}" ]; then
+            echo "ERROR: Terraform directory not found!"
+            exit 1
+          fi
+        shell: bash
 
       - name: Terraform Init
         working-directory: ${{ env.TERRAFORM_PATH }}
